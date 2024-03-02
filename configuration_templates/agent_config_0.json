@@ -1,0 +1,11 @@
+{
+    "agent_control":"Human",
+    "render_condition":false,
+    "store_observations":true,
+    "emu_clock_mgr":null,
+    "agent_driver":"Native",
+    "game_config_data":{
+        "rom_path":"/path/to/game_boy_advance/ROM.gba",
+        "save_state_path":"/path/to/game_boy_advance/save_states/save_state_file.ss1"
+    }
+}

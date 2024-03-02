@@ -1,0 +1,22 @@
+[package]
+name = "mgba_gaming_agent"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+argparse = "0.2.2"
+ctrlc = "3.4.2"
+fork = "0.1.23"
+image = "0.24.8"
+libc = "0.2.153"
+libloading = "0.8.1"
+ouroboros = "0.18.3"
+sdl2 = "0.36.0"
+sdl2-sys = "0.36.0"
+serde = { version = "1.0.196", features = ["derive"] }
+serde_json = "1.0.113"
+
+[build-dependencies]
+cc = "1.0"

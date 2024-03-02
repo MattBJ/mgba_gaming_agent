@@ -1,0 +1,11 @@
+{
+    "agent_control":"Human",
+    "render_condition":true,
+    "store_observations":true,
+    "emu_clock_mgr":{"Clock":{"rate":60}},
+    "agent_driver":{"Sockets":13721},
+    "game_config_data":{
+        "rom_path":"/path/to/game_boy/ROM.gb",
+        "save_state_path":null
+    }
+}

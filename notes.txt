@@ -1,0 +1,92 @@
+
+- 2/25: at a stopping point, list of capabilities:
+    >> Did a lot of nice arg parsing in the main source file for displaying every capability designed, interoperability with the past
+    >> can compile/clean/spawn C server/client
+    >> can spawn a C Tcp socket server and run a rust client to communicate with it
+    >> can spawn a rust tcp socket server and run a rust client to communicate with it
+    >> Can run the mgba core directly (Native) in the agent
+    >> Designed basic IPC example/prototypes in the main code
+        -- Boss/Worker processes
+            -- Boss will spawn a bunch of worker processes and control them
+            -- Workers are processes that run an Agent
+        -- Process spawn rationalle
+            -- Sdl (at least) has issues multithreading in shared memory space, so I just simplified that
+
+##################################################################################################################
+# TODO LIST
+##################################################################################################################
+2/25 TODO list in order of importance (or equal)
+- Check into CPU/Core affinity
+    >> Meh not a big deal
+    >> Should be simple experiment to see if it's worth doing
+    >> Better to just leave the processes in only 1 core stop context switching??
+- State machine/Standard operating procedure for Boss-Worker Life
+    >> Operating procedure for IPC portion of code!!!
+    >> Variant? Or always the same?
+    >> Initialize/bringup --> Training batch --> Learn --> ... --> ...
+    >> State transitions don't happen rapidly
+        --> Exists the major STEADY STATE -- 99% of execution time is in
+    >> Should Workers have a thread that forwards IPComms for IO with Agent in steady state?
+
+----- these following two might need to be addressed at the same time? ----
+
+- Need to decide on first AI methods
+    >> Research what libraries rust has again (ecosystem bookmark)
+        -- Best to just use something more professional/currated than from scratch
+            >> EVENTUALLY could dig into code or design my own if no solution..
+    >> FIRST: simplify!
+        -- solution space (basic NN's instead of something exotic)
+        -- just a battle network fight
+            >> seed RNG?? How can do this
+                -- agent core initialization -- IO with memory
+- Figure out Batch flow
+    >> Flow of the Boss/Worker relationship
+
+##################################################################################################################
+# Potential needs todo
+##################################################################################################################
+- Implement low level MEMORY OPS for game:
+    >> Need to seed RNG?
+        -- need to look into specific game ROMs + libmgba a bit more
+    >> Any other MEMORY OPS reading I should potentially consider?
+        -- all these MEMORY OPS require some reverse engineering on games themselves
+        -- MEMORY OPS would need specific AgentConfiguration argument to run
+            >> PokemonRed::SeedRNG
+            >> BattleNetwork::{SeedRNG,ReadScore,DeathScreen}
+    >> Where in libmgba can I find some memory operations?
+        -- src/gba/memory.c (does this work for gb)
+        -- src/gb/memory.c
+        -- Also, they have some old python bindings one can look at?
+            >> src/platform/python/
+##################################################################################################################
+# WORK IN PROGRESS LIST
+##################################################################################################################
+
+##################################################################################################################
+# DONE LIST (goes to the top with capabilities?)
+##################################################################################################################
+- Removed some main application scenarios
+    >> Fork couldn't be used "safely" with ctrlc handler already setup and copied over
+    >> Removed TestUDS because unix domain socket is pretty much already figured out now
+    >> Note: Any scenario using C server has a bit messed up SDL resolution, but that's only due to C code stuff
+        --> Won't be concerned with addressing server.c C code
+- Cleaned up Rust server + core usage
+    >> Now init_core and init_connection both make calls to mgba_ffi
+        >> mgba_ffi::init_core actually does the C FFI calls to initialize a core (and makes an ObservationData obj)
+- Copying over files for workers
+- Have save files and save states working properly
+- Refined Agent's run_client execution loop
+- Basic Agent stop execution flag (Atomic reference counted boolean)
+    >> Based off of handling SIGINT (ctrlc)
+    >> Still need the configuration method way of defining an epoch/training session size
+- Deinit C api / use box's to allocate instead of just malloc
+    >> Malloc for things the agent tracks, does the agent continue running?
+        -- Logger, video output buffer. lifetime with Agent::new->Agent::init_core
+    >> Memory leak when Drop'd, but Agent doesn't Drop until end of program
+- Sdl or DirectIO variants
+    >> Controls where the FrameBuffer is stored
+    >> DirectIO means we're not even tracking an Sdl window
+- Removed super gameboy border
+- Turned off logging (mgba_ffi::log_handler)
+- Cleaned up the Drop of the mgba structs being tracked, PLUS using Box and Vec for some of their heap stuff
+- Cleaned code (fix warnings/ and case/style conventions)
