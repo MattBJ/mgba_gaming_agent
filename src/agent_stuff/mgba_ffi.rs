@@ -77,7 +77,7 @@ pub fn init_core(
     game_config_data: &GameConfigData,
 ) -> (ObservationData, CoreData) {
     
-    let libmgba_so_path = ffi::OsStr::new("/usr/lib/x86_64-linux-gnu/libmgba.so.0.11.0");
+    let libmgba_so_path = ffi::OsStr::new("libmgba.so.0.11");
     // load in dynamic library!
     let loaded_mgba_lib = unsafe {
         mgba::new(libmgba_so_path).expect("Error loading in dynamic libmgba.so lib")
